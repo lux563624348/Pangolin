@@ -14,9 +14,14 @@ IN_MAP = np.asarray([[0, 0, 0, 0],
                      [0, 0, 1, 0],
                      [0, 0, 0, 1]])
 
+def clean_sequence(seq):
+    allowed = {'A', 'T', 'C', 'G', 'N'}
+    return ''.join(base for base in seq.upper() if base in allowed)
+
 
 def one_hot_encode(seq, strand):
-    seq = seq.upper().replace('A', '1').replace('C', '2')
+    seq = clean_sequence(seq.upper())
+    seq = seq.replace('A', '1').replace('C', '2')
     seq = seq.replace('G', '3').replace('T', '4').replace('N', '0')
     if strand == '+':
         seq = np.asarray(list(map(int, list(seq))))
