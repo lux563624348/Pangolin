@@ -257,7 +257,7 @@ def main():
         new_header.add_info_line(
             {
                 "ID": "Pangolin",
-                "Number": ".",
+                "Number": "1",
                 "Type": "String",
                 "Description": "Pangolin splice scores. Format: gene|pos:score_change|pos:score_change|warnings,...",
                 "Source": ".",
