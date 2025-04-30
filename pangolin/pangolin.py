@@ -1,7 +1,7 @@
 import argparse
 from pkg_resources import resource_filename
 from pangolin.model import *
-import vcf
+import vcfpy
 import gffutils
 import pandas as pd
 import pyfastx
@@ -240,11 +240,11 @@ def main():
             if line[0] != '#':
                 break
 
-        variants = vcf.Reader(filename=variants)
-        variants.infos["Pangolin"] = vcf.parser._Info(
+        variants = vcfpy.Reader(filename=variants)
+        variants.infos["Pangolin"] = vcfpy.parser._Info(
             "Pangolin",'.',"String","Pangolin splice scores. "
             "Format: gene|pos:score_change|pos:score_change|warnings,...",'.','.')
-        fout = vcf.Writer(open(args.output_file+".vcf", 'w'), variants)
+        fout = vcfpy.Writer(open(args.output_file+".vcf", 'w'), variants)
 
         for i, variant in enumerate(variants):
             scores = process_variant(lnum+i, str(variant.CHROM), int(variant.POS), variant.REF, str(variant.ALT[0]), gtf, models, args)
