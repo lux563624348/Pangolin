@@ -240,11 +240,12 @@ def main():
             if line[0] != '#':
                 break
 
-        variants = vcfpy.Reader(filename=variants)
+        variants = vcfpy.Reader.from_path(variants)
         variants.infos["Pangolin"] = vcfpy.parser._Info(
             "Pangolin",'.',"String","Pangolin splice scores. "
             "Format: gene|pos:score_change|pos:score_change|warnings,...",'.','.')
-        fout = vcfpy.Writer(open(args.output_file+".vcf", 'w'), variants)
+        #fout = vcf.Writer(open(args.output_file+".vcf", 'w'), variants)
+        fout = vcfpy..Writer.from_path(args.output_file+".vcf", variants.header)
 
         for i, variant in enumerate(variants):
             scores = process_variant(lnum+i, str(variant.CHROM), int(variant.POS), variant.REF, str(variant.ALT[0]), gtf, models, args)
