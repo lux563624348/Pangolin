@@ -241,11 +241,30 @@ def main():
                 break
 
         variants = vcfpy.Reader.from_path(variants)
-        variants.infos["Pangolin"] = vcfpy.parser._Info(
-            "Pangolin",'.',"String","Pangolin splice scores. "
-            "Format: gene|pos:score_change|pos:score_change|warnings,...",'.','.')
-        #fout = vcf.Writer(open(args.output_file+".vcf", 'w'), variants)
-        fout = vcfpy.Writer.from_path(args.output_file+".vcf", variants.header)
+        old_header = variants.header
+
+        # Copy header lines
+        new_header = vcfpy.Header(
+            samples=old_header.samples,
+            lines=old_header.lines.copy()
+        )
+        # Append a new INFO line
+        new_header.add_info_line(
+            {
+                "ID": "Pangolin",
+                "Number": ".",
+                "Type": "String",
+                "Description": "Pangolin splice scores. Format: gene|pos:score_change|pos:score_change|warnings,...",
+                "Source": ".",
+                "Version": "."
+            }
+        )
+
+       # variants.infos["Pangolin"] = vcfpy.parser._Info(
+       #     "Pangolin",'.',"String","Pangolin splice scores. "
+       #     "Format: gene|pos:score_change|pos:score_change|warnings,...",'.','.')
+       # fout = vcf.Writer(open(args.output_file+".vcf", 'w'), variants)
+        fout = vcfpy.Writer.from_path(args.output_file+".vcf", new_header)
 
         for i, variant in enumerate(variants):
             scores = process_variant(lnum+i, str(variant.CHROM), int(variant.POS), variant.REF, str(variant.ALT[0]), gtf, models, args)
