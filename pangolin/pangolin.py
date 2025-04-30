@@ -271,7 +271,7 @@ def main():
             if scores != -1:
                 variant.INFO["Pangolin"] = scores
             fout.write_record(variant)
-            fout.flush()
+
 
         fout.close()
 
@@ -280,7 +280,6 @@ def main():
         variants = pd.read_csv(variants, header=0)
         fout = open(args.output_file+".csv", 'w')
         fout.write(','.join(variants.columns)+',Pangolin\n')
-        fout.flush()
 
         for lnum, variant in variants.iterrows():
             chr, pos, ref, alt = variant[col_ids]
@@ -290,7 +289,6 @@ def main():
                 fout.write(','.join(variant.to_csv(header=False, index=False).split('\n'))+'\n')
             else:
                 fout.write(','.join(variant.to_csv(header=False, index=False).split('\n'))+scores+'\n')
-            fout.flush()
 
         fout.close()
 
